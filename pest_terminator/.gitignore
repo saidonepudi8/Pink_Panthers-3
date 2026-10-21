@@ -14,6 +14,8 @@ migrate_working_dir/
 .idea/
 .dart_tool/
 .metadata
+.venv
+__pycache__/
 
 # IntelliJ related
 *.iml
