@@ -16,6 +16,7 @@ migrate_working_dir/
 .metadata
 .venv
 __pycache__/
+instance/
 
 # IntelliJ related
 *.iml
