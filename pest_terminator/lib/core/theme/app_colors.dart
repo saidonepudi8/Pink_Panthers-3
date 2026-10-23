@@ -4,7 +4,7 @@ class AppColors {
   AppColors._();
 
   static const Color background = Color(0xFFF6F3EC);
-  static const Color surface = Color(0xFFFFFDF8);  // inputs, back button
+  static const Color surface = Color(0xFFF9F8F7);  // inputs, back button
   static const Color border = Color(0xFFE4E0D5);
   static const Color primary = Color(0xFF17382F);
   static const Color accent = Color(0xFF3F7A5E);  // eyebrow, links
