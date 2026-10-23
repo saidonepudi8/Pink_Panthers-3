@@ -12,29 +12,42 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     this.isLoading = false,
     this.trailingIcon = Icons.arrow_forward_rounded,
+    this.leadingIcon,
+    this.compact = false,
+    this.tonal = false,
   });
 
   final String label;
   final VoidCallback onPressed;
   final bool isLoading;
-  final IconData trailingIcon;
+  final IconData? trailingIcon;
+  final IconData? leadingIcon;
+  final bool compact;
+  final bool tonal;
 
   @override
   Widget build(BuildContext context) {
+    final bkgd = tonal ? AppColors.logoTint : AppColors.primary;
+    final foreground = tonal ? AppColors.primary : AppColors.onPrimary;
+    final textStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
+      color: foreground,
+      fontSize: compact ? 14 : null,
+    );
+
     return SizedBox(
       width: double.infinity,
-      height: AppSizes.buttonHeight,
+      height: compact ? 44 : 56,
 
       // Button
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.onPrimary,
-          disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.7),
-          disabledForegroundColor: AppColors.onPrimary,
+          backgroundColor: bkgd,
+          foregroundColor: foreground,
+          disabledBackgroundColor: bkgd.withValues(alpha: 0.7),
+          disabledForegroundColor: foreground,
           elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: compact ? 16 : 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.button),
           ),
@@ -42,26 +55,24 @@ class PrimaryButton extends StatelessWidget {
 
         // Show loading on button if loading else show label and trailing icon
         child: isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 width: 22,
                 height: 22,
                 child: CircularProgressIndicator(
-                  color: AppColors.onPrimary,
+                  color: foreground,
                   strokeWidth: 2.4,
                 ),
               )
             : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.onPrimary,
-                  )
-                ),
+                if(leadingIcon != null) ...[
+                  Icon(leadingIcon, size: 20),
+                  const SizedBox(width: 10)
+                ],
+                Expanded(child: Text(label, style: textStyle)),
 
                 // Show trailing icon if not null
-                if (trailingIcon != null) Icon(trailingIcon, size: 22)
+                if (trailingIcon != null) Icon(trailingIcon, size: compact ? 20 : 22)
               ]
             )
       ),

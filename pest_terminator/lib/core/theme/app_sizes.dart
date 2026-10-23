@@ -18,6 +18,7 @@ class AppRadius {
   static const double field = 16;
   static const double button = 16;
   static const double logo = 12;
+  static const double card = 20;
 }
 
 class AppSizes {
