@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pest_terminator/features/auth/home/screens/homepage.dart';
+import 'package:pest_terminator/features/reports/screens/report_screen.dart';
 
 // Bottom Navigation Menu
 class NavigationMenu extends StatelessWidget {
@@ -60,7 +61,7 @@ class NavigationController extends GetxController {
   final screens = [
     const HomeScreen(),
     Container(color: Colors.blue), // Investigate Page
-    Container(color: Colors.green), // Reports Page
+    const ReportScreen(), // Reports Page
     Container(color: Colors.purple), // Profile Page
   ];
 }

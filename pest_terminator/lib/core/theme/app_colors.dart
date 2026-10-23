@@ -16,8 +16,8 @@ class AppColors {
   static const Color onPrimary = Color(0xFFFFFFFF);
 
   // Status colours (priority, alert status, notes)
-  static const Color warning = Color(0xFFB07A33);
-  static const Color warningSoft = Color(0xFFF4ECDD);
+  static const Color warning = Color(0xFFB03733);
+  static const Color warningSoft = Color.fromARGB(255, 201, 160, 85);
   static const Color success = Color(0xFF4E9B6C);
   
 }
