@@ -17,7 +17,6 @@ class AppTextField extends StatefulWidget {
     this.textInputAction,
     this.autofillHints,
     this.onFieldSubmitted,
-    this.enabled = true,
   });
 
   final String label;
@@ -30,7 +29,6 @@ class AppTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final Iterable<String>? autofillHints;
   final ValueChanged<String>? onFieldSubmitted;
-  final bool enabled;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -55,7 +53,6 @@ class _AppTextFieldState extends State<AppTextField> {
         // Form field
         TextFormField(
           controller: widget.controller,
-          enabled: widget.enabled,
           obscureText: widget.isPassword && _obscured,
           keyboardType: widget.keyboardType,
           textInputAction: widget.textInputAction,
@@ -72,7 +69,7 @@ class _AppTextFieldState extends State<AppTextField> {
           // Input decor
           decoration: InputDecoration(
             hintText: widget.hint,
-            prefixIcon: Icon(widget.prefixIcon, color: AppColors.primary),
+            prefixIcon: Icon(widget.prefixIcon, color: AppColors.textPrimary),
             suffixIcon: widget.isPassword
                 ? Padding(
                     padding: const EdgeInsets.only(right: 8),

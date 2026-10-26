@@ -4,7 +4,7 @@ class AppColors {
   AppColors._();
 
   static const Color background = Color(0xFFF6F3EC);
-  static const Color surface = Color(0xFFFFFDF8);  // inputs, back button
+  static const Color surface = Color(0xFFF9F8F7);  // inputs, back button
   static const Color border = Color(0xFFE4E0D5);
   static const Color primary = Color(0xFF17382F);
   static const Color accent = Color(0xFF3F7A5E);  // eyebrow, links
@@ -14,5 +14,10 @@ class AppColors {
   static const Color hint = Color(0xFF8A958F);
   static const Color error = Color(0xFFB3261E);
   static const Color onPrimary = Color(0xFFFFFFFF);
+
+  // Status colours (priority, alert status, notes)
+  static const Color warning = Color(0xFFB03733);
+  static const Color warningSoft = Color.fromARGB(255, 201, 160, 85);
+  static const Color success = Color(0xFF4E9B6C);
   
 }
