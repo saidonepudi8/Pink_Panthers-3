@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../../../navigation_menu.dart';
 import '../models/pest_alert.dart';
+import '../data/alerts_repository.dart';
 
 // Holds alert list, search query and alert being investigated. BOTH Reports & Investigate read from this controller.
 class AlertsController extends GetxController {
@@ -10,6 +11,8 @@ class AlertsController extends GetxController {
   // Tab positions in bottom nav: Home, Investigate (1), Reports (2), Profile
   static const int _investigateTab = 1;
   static const int _reportsTab = 2;
+
+  final _repository = AlertsRepository();
 
   // TODO(api): replace with data from Flask (same pattern as AuthController)
   final alerts = <PestAlert>[
@@ -47,9 +50,17 @@ class AlertsController extends GetxController {
     ),
   ].obs;
 
+  // TODO: Need to pull this from backend
   final stats = const AlertStats(total: 18, active: 3, resolved: 12).obs;
+
   final query = ''.obs;
   final selected = Rxn<PestAlert>();
+
+  // Classification results for selected pest
+  final results = <AnalysisResult>[].obs;
+  final isPredicting = false.obs;
+  final predError = RxnString();
+
 
   @override
   void onInit() {
@@ -79,10 +90,39 @@ class AlertsController extends GetxController {
     return groups;
   }
 
-  // Control nav between two tabs: investigate and reports
+  // Called from Reports to select a pest alert to investigate in Investigate page
   void investigate(PestAlert alert) {
+
+    // Avoid showing another pest alert's results
+    if(selected.value?.id != alert.id) {
+      results.clear();
+      predError.value = null;
+    }
+
     selected.value = alert;
     Get.find<NavigationController>().selectedIndex.value = _investigateTab;
+  }
+
+  // Called by Predict/Investigate button to display once results is populated
+  Future<void> runPrediction() async {
+    final alert = selected.value;
+    if(alert == null) return;
+
+    isPredicting.value = true;
+    predError.value = null;
+
+    // Await repository to fill results data
+    try {
+      final result = await _repository.classify(alert);
+
+      // User switched alerts
+      if(selected.value?.id != alert.id) return;
+      results.assignAll(result);
+    } catch (e) {
+      predError.value = 'Could not complete analysis. Try again.';
+    } finally {
+      isPredicting.value = false;
+    }
   }
 
   void backToAlerts() {
