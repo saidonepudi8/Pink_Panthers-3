@@ -11,7 +11,7 @@ class AlertsController extends GetxController {
   static const int _investigateTab = 1;
   static const int _reportsTab = 2;
 
-  // TODO(api): replace with data from Flask (same pattern as AuthController)
+  // TODO: Replace sample alerts with data loaded from Firestore.
   final alerts = <PestAlert>[
     PestAlert(
       id: '1',

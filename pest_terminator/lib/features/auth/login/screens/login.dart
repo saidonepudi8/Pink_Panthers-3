@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:pest_terminator/features/auth/login/controllers/login_controller.dart';
 
-import '../../../../core/network/api_client.dart';
+import '../../controllers/auth_controller.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/primary_button.dart';
@@ -21,10 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
-  final _loginController = LoginController();
 
-  // Form-local UI state lives here; app-wide session state lives in
-  // AuthController.
   bool _isLoading = false;
   String? _error;
 
@@ -44,17 +41,17 @@ class _LoginScreenState extends State<LoginScreen> {
       _error = null;
     });
 
-    // Attempt sign in
     try {
-      await _loginController.signIn(
+      // Collect details and attempt user authentication
+      await AuthController.instance.signIn(
         email: _email.text.trim(),
         password: _password.text,
       );
       if (!mounted) return;
       Get.offAll(() => const NavigationMenu());
-    } on ApiException catch (error) {
+    } on FirebaseAuthException catch (error) {
       if (!mounted) return;
-      setState(() => _error = error.message);
+      setState(() => _error = AuthController.messageFor(error));
     } catch (_) {
       if (!mounted) return;
       setState(() => _error = 'Something went wrong. Try again.');
