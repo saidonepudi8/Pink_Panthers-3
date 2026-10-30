@@ -14,7 +14,7 @@ class AlertsController extends GetxController {
 
   final _repository = AlertsRepository();
 
-  // TODO(api): replace with data from Flask (same pattern as AuthController)
+  // TODO: Replace sample alerts with data loaded from Firestore.
   final alerts = <PestAlert>[
     PestAlert(
       id: '1',

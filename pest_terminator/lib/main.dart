@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'pest_terminator.dart';
-import 'package:get/get.dart';
-import 'features/reports/controllers/alert_controller.dart';
-import 'features/auth/controllers/auth_controller.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  Get.put(AuthController(), permanent: true); // must exist for session from first frame
-  Get.lazyPut(() => AlertsController(), fenix: true);
+import 'firebase_options.dart';
+import 'pest_terminator.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load env vars
+  await dotenv.load(fileName: 'lib/.env');
+
+  // Connect to Firebase backend
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const PestTerminator());
 }
-
