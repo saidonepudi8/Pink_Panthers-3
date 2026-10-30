@@ -57,3 +57,4 @@ android/
 web/
 
 .env
+.python-version
