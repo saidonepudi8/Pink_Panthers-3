@@ -68,3 +68,12 @@ class AlertStats {
   final int active;
   final int resolved;
 }
+
+// Each row in Investigate Screen's analysis result table
+class AnalysisResult {
+  const AnalysisResult(this.label, this.value, {this.level});
+
+  final String label;
+  final String value;
+  final AlertPriority? level;
+}

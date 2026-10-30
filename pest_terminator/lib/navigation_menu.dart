@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pest_terminator/features/auth/home/screens/homepage.dart';
+import 'package:pest_terminator/features/investigate/screens/investigate_screen.dart';
 import 'package:pest_terminator/features/reports/screens/report_screen.dart';
 
 // Bottom Navigation Menu
@@ -60,7 +61,7 @@ class NavigationController extends GetxController {
   // Replace containers with screens
   final screens = [
     const HomeScreen(),
-    Container(color: Colors.blue), // Investigate Page
+    const InvestigateScreen(), // Investigate Page
     const ReportScreen(), // Reports Page
     Container(color: Colors.purple), // Profile Page
   ];
