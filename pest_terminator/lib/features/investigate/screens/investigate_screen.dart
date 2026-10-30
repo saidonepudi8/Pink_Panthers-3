@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_sizes.dart';
 import '../../../core/widgets/display_widgets.dart';
 import '../../../core/widgets/screen_layout.dart';
+import '../../../services/spray_service.dart';
 import '../../reports/controllers/alert_controller.dart';
 import '../widgets/alerts_summary_card.dart';
 import '../widgets/results_card.dart';
@@ -97,7 +98,34 @@ class _AlertDetails extends StatelessWidget {
             // Spray Button (TEMPORARY placement)
             Center(
               child: TextButton.icon(
-                onPressed: () => {},
+                onPressed: () async {
+                  try {
+                    // Send signal to spray pesticide
+                    await SprayService().sendSignal();
+                    if (!context.mounted) return;
+
+                    // If signal handled successfully, show success message as snack bar.
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Pesticide sprayed!',
+                        ),
+                      ),
+                    );
+                  } catch (error) {
+                    debugPrint('Spray API request failed: $error');
+                    if (!context.mounted) return;
+
+                    // If could not reach API, show failed message as snackbar. (check if server running :P)
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Spray action failed. Try again.',
+                        ),
+                      ),
+                    );
+                  }
+                },
                 icon: const Icon(Icons.pest_control_outlined), 
                 label: const Text(
                   'Spray pesticide',
