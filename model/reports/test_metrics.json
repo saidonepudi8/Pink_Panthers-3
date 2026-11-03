@@ -1,0 +1,293 @@
+{
+  "test_images": 2167,
+  "top1_accuracy": 0.8103,
+  "macro_f1": 0.8125,
+  "per_class": [
+    {
+      "class": "beaver",
+      "support": 112,
+      "precision": 0.934,
+      "recall": 0.884,
+      "f1": 0.908
+    },
+    {
+      "class": "bird",
+      "support": 182,
+      "precision": 0.773,
+      "recall": 0.786,
+      "f1": 0.779
+    },
+    {
+      "class": "coyote",
+      "support": 214,
+      "precision": 0.796,
+      "recall": 0.804,
+      "f1": 0.8
+    },
+    {
+      "class": "livestock",
+      "support": 219,
+      "precision": 0.88,
+      "recall": 0.804,
+      "f1": 0.84
+    },
+    {
+      "class": "other_wildlife",
+      "support": 208,
+      "precision": 0.629,
+      "recall": 0.678,
+      "f1": 0.653
+    },
+    {
+      "class": "person",
+      "support": 225,
+      "precision": 0.978,
+      "recall": 0.991,
+      "f1": 0.985
+    },
+    {
+      "class": "pet",
+      "support": 211,
+      "precision": 0.756,
+      "recall": 0.645,
+      "f1": 0.696
+    },
+    {
+      "class": "rabbit",
+      "support": 205,
+      "precision": 0.778,
+      "recall": 0.771,
+      "f1": 0.775
+    },
+    {
+      "class": "rodent",
+      "support": 187,
+      "precision": 0.778,
+      "recall": 0.861,
+      "f1": 0.817
+    },
+    {
+      "class": "squirrel",
+      "support": 195,
+      "precision": 0.79,
+      "recall": 0.81,
+      "f1": 0.8
+    },
+    {
+      "class": "wild_pig",
+      "support": 209,
+      "precision": 0.867,
+      "recall": 0.904,
+      "f1": 0.885
+    }
+  ],
+  "per_source_accuracy": {
+    "ammonitor": {
+      "n": 239,
+      "acc": 0.77
+    },
+    "caltech": {
+      "n": 331,
+      "acc": 0.64
+    },
+    "channel_islands": {
+      "n": 93,
+      "acc": 0.742
+    },
+    "csa": {
+      "n": 157,
+      "acc": 0.752
+    },
+    "ena24": {
+      "n": 317,
+      "acc": 0.902
+    },
+    "inat": {
+      "n": 112,
+      "acc": 0.884
+    },
+    "missouri": {
+      "n": 87,
+      "acc": 0.724
+    },
+    "nacti": {
+      "n": 519,
+      "acc": 0.855
+    },
+    "openimages": {
+      "n": 225,
+      "acc": 0.991
+    },
+    "osu": {
+      "n": 87,
+      "acc": 0.667
+    }
+  },
+  "most_common_confusions": [
+    {
+      "true": "livestock",
+      "pred": "other_wildlife",
+      "count": 19
+    },
+    {
+      "true": "coyote",
+      "pred": "other_wildlife",
+      "count": 18
+    },
+    {
+      "true": "pet",
+      "pred": "other_wildlife",
+      "count": 18
+    },
+    {
+      "true": "pet",
+      "pred": "coyote",
+      "count": 15
+    },
+    {
+      "true": "other_wildlife",
+      "pred": "coyote",
+      "count": 14
+    },
+    {
+      "true": "other_wildlife",
+      "pred": "rodent",
+      "count": 14
+    },
+    {
+      "true": "rabbit",
+      "pred": "rodent",
+      "count": 14
+    },
+    {
+      "true": "other_wildlife",
+      "pred": "pet",
+      "count": 13
+    },
+    {
+      "true": "rabbit",
+      "pred": "other_wildlife",
+      "count": 13
+    },
+    {
+      "true": "squirrel",
+      "pred": "bird",
+      "count": 12
+    }
+  ],
+  "confusion_matrix": {
+    "beaver": {
+      "beaver": 99,
+      "squirrel": 4,
+      "rabbit": 1,
+      "person": 2,
+      "bird": 3,
+      "pet": 2,
+      "other_wildlife": 1
+    },
+    "bird": {
+      "coyote": 4,
+      "bird": 143,
+      "pet": 8,
+      "squirrel": 11,
+      "other_wildlife": 1,
+      "rodent": 7,
+      "livestock": 2,
+      "rabbit": 6
+    },
+    "coyote": {
+      "coyote": 172,
+      "other_wildlife": 18,
+      "rabbit": 7,
+      "pet": 5,
+      "squirrel": 3,
+      "livestock": 3,
+      "rodent": 3,
+      "bird": 2,
+      "wild_pig": 1
+    },
+    "livestock": {
+      "livestock": 176,
+      "other_wildlife": 19,
+      "pet": 4,
+      "wild_pig": 11,
+      "coyote": 3,
+      "bird": 2,
+      "squirrel": 2,
+      "rabbit": 1,
+      "rodent": 1
+    },
+    "other_wildlife": {
+      "other_wildlife": 141,
+      "coyote": 14,
+      "wild_pig": 7,
+      "beaver": 3,
+      "squirrel": 4,
+      "pet": 13,
+      "livestock": 4,
+      "bird": 5,
+      "rodent": 14,
+      "rabbit": 3
+    },
+    "person": {
+      "person": 223,
+      "beaver": 1,
+      "livestock": 1
+    },
+    "pet": {
+      "pet": 136,
+      "other_wildlife": 18,
+      "coyote": 15,
+      "squirrel": 9,
+      "bird": 9,
+      "person": 2,
+      "beaver": 1,
+      "wild_pig": 6,
+      "rabbit": 6,
+      "livestock": 7,
+      "rodent": 2
+    },
+    "rabbit": {
+      "rodent": 14,
+      "rabbit": 158,
+      "coyote": 4,
+      "squirrel": 7,
+      "pet": 1,
+      "bird": 3,
+      "other_wildlife": 13,
+      "wild_pig": 2,
+      "livestock": 3
+    },
+    "rodent": {
+      "rodent": 161,
+      "rabbit": 9,
+      "beaver": 1,
+      "other_wildlife": 6,
+      "bird": 6,
+      "coyote": 1,
+      "person": 1,
+      "wild_pig": 2
+    },
+    "squirrel": {
+      "squirrel": 158,
+      "pet": 4,
+      "coyote": 2,
+      "rabbit": 10,
+      "beaver": 1,
+      "rodent": 4,
+      "bird": 12,
+      "other_wildlife": 4
+    },
+    "wild_pig": {
+      "pet": 7,
+      "livestock": 4,
+      "wild_pig": 189,
+      "other_wildlife": 3,
+      "squirrel": 2,
+      "rabbit": 2,
+      "rodent": 1,
+      "coyote": 1
+    }
+  },
+  "cpu_ms_per_image_batch64": 13.0
+}
