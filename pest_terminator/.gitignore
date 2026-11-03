@@ -55,3 +55,5 @@ windows/
 ios/
 android/
 web/
+
+.env

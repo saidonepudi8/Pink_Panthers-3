@@ -1,27 +1,69 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import '../../../core/network/token_storage.dart';
-import '../models/auth_user.dart';
 
-// Set app-wide session state. Registered once in main.dart as permanent controller.
+import '../../../services/auth_service.dart';
+
 class AuthController extends GetxController {
+  AuthController({required AuthService authService})
+    : _authService = authService;
 
-  // Convenience shortcut for use in other files
   static AuthController get instance => Get.find();
 
-  final TokenStorage _tokens = TokenStorage();
-  final Rxn<AuthUser> user = Rxn<AuthUser>();
+  final AuthService _authService;
+  final Rxn<User> user = Rxn<User>();
+  late final StreamSubscription<User?> _userSubscription;
 
-  // if user obj exists, then logged in
   bool get isLoggedIn => user.value != null;
 
-  // If user logged in, save tokens to persistent storage so user stays logged in across app restarts
-  Future<void> startSession(AuthSession sesh) async {
-    await _tokens.save(accessToken: sesh.accessToken, refreshToken: sesh.refreshToken);
-    user.value = sesh.user;  // update that user is logged in
+  @override
+  void onInit() {
+    super.onInit();
+    user.value = _authService.currentUser;
+    _userSubscription = _authService.userChanges.listen((firebaseUser) {
+      user.value = firebaseUser;
+    });
   }
 
-  Future<void> signOut() async {
-    await _tokens.clear();
-    user.value = null;  // update that user is logged out
+  // Sign in method for UI use
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) => _authService.signIn(email: email, password: password);
+
+  // Register method for UI use
+  Future<void> register({
+    required String name,
+    required String email,
+    required String password,
+  }) => _authService.register(name: name, email: email, password: password);
+
+  // Sign out method for UI use
+  Future<void> signOut() => _authService.signOut();
+
+  // Handle authentication errors
+  static String messageFor(FirebaseAuthException error) {
+    return switch (error.code) {
+      'invalid-email' => 'Enter a valid email address.',
+      'user-not-found' ||
+      'wrong-password' ||
+      'invalid-credential' => 'The email or password is incorrect.',
+      'email-already-in-use' => 'An account already exists for this email.',
+      'weak-password' => 'Choose a stronger password.',
+      'network-request-failed' =>
+        'Could not connect. Check your internet connection and try again.',
+      'too-many-requests' =>
+        'Too many attempts. Please wait a while and try again.',
+      'operation-not-allowed' =>
+        'Email and password sign-in is not enabled for this Firebase project.',
+      _ => error.message ?? 'Authentication failed. Please try again.',
+    };
+  }
+
+  @override
+  void onClose() {
+    unawaited(_userSubscription.cancel());
+    super.onClose();
   }
 }
