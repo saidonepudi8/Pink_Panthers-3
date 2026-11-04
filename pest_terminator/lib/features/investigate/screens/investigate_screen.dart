@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_sizes.dart';
 import '../../../core/widgets/display_widgets.dart';
 import '../../../core/widgets/screen_layout.dart';
+import '../../../services/spray_service.dart';
 import '../../reports/controllers/alert_controller.dart';
 import '../widgets/alerts_summary_card.dart';
 import '../widgets/results_card.dart';
@@ -72,8 +73,8 @@ class _AlertDetails extends StatelessWidget {
         // Run Prediction button
         Obx(() => PrimaryButton(
               label: c.results.isEmpty
-                  ? 'Run AI investigation'
-                  : 'Re-run investigation',
+                  ? 'Predict Pest'
+                  : 'Re-run Prediction',
               isLoading: c.isPredicting.value,
               onPressed: c.runPrediction,
             )),
@@ -90,19 +91,64 @@ class _AlertDetails extends StatelessWidget {
           );
         }),
 
-        const SizedBox(height: AppSpacing.sm),
-        // Back to Reports page text button
-        Center(
-          child: TextButton.icon(
-            onPressed: c.backToAlerts,
-            icon: const Icon(Icons.chevron_left_rounded, size: 22), 
-            label: const Text(
-              'Back to pest alerts',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+        const SizedBox(height: AppSpacing.lg),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Spray Button (TEMPORARY placement)
+            Center(
+              child: TextButton.icon(
+                onPressed: () async {
+                  try {
+                    // Send signal to spray pesticide
+                    await SprayService().sendSignal();
+                    if (!context.mounted) return;
+
+                    // If signal handled successfully, show success message as snack bar.
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Pesticide sprayed!',
+                        ),
+                      ),
+                    );
+                  } catch (error) {
+                    debugPrint('Spray API request failed: $error');
+                    if (!context.mounted) return;
+
+                    // If could not reach API, show failed message as snackbar. (check if server running :P)
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Spray action failed. Try again.',
+                        ),
+                      ),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.pest_control_outlined), 
+                label: const Text(
+                  'Spray pesticide',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)
+                ),
+                style: TextButton.styleFrom(foregroundColor: AppColors.warningSoft),
+              ),
             ),
-            style: TextButton.styleFrom(foregroundColor: AppColors.accent),
-          ),
-        )
+
+            // Back to Reports page text button
+            Center(
+              child: TextButton.icon(
+                onPressed: c.backToAlerts,
+                label: const Text(
+                  'Back to pest alerts',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                ),
+                icon: const Icon(Icons.chevron_right_rounded, size: 22), 
+                style: TextButton.styleFrom(foregroundColor: AppColors.accent),
+              ),
+            ),
+          ],
+        ),
 
       ],
     );
