@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../../navigation_menu.dart';
@@ -26,7 +27,7 @@ class AlertsController extends GetxController {
       status: AlertStatus.newDetection,
       detectedAt: DateTime(2025, 5, 14, 7, 42),
       matchPercent: 89,
-      imageSrc: 'rodent.png',
+      imageSrc: 'assets/rodent.png',
     ),
     PestAlert(
       id: '2',
@@ -60,6 +61,7 @@ class AlertsController extends GetxController {
   final results = <AnalysisResult>[].obs;
   final isPredicting = false.obs;
   final predError = RxnString();
+  final lastRunAt = Rxn<DateTime>(); // When the model last returned results (shows each re-run is fresh)
 
 
   @override
@@ -97,19 +99,24 @@ class AlertsController extends GetxController {
     if(selected.value?.id != alert.id) {
       results.clear();
       predError.value = null;
+      lastRunAt.value = null;
     }
 
     selected.value = alert;
     Get.find<NavigationController>().selectedIndex.value = _investigateTab;
   }
 
-  // Called by Predict/Investigate button to display once results is populated
+  // Called by Predict button: sends the alert image to the model (POST /api/predict) and shows the results
   Future<void> runPrediction() async {
     final alert = selected.value;
     if(alert == null) return;
 
     isPredicting.value = true;
     predError.value = null;
+
+    // Clear previous results so a re-run visibly starts from scratch
+    results.clear();
+    lastRunAt.value = null;
 
     // Await repository to fill results data
     try {
@@ -118,8 +125,12 @@ class AlertsController extends GetxController {
       // User switched alerts
       if(selected.value?.id != alert.id) return;
       results.assignAll(result);
+      lastRunAt.value = DateTime.now();
+    } on PredictionException catch (e) {
+      predError.value = e.message;
     } catch (e) {
-      predError.value = 'Could not complete analysis. Try again.';
+      debugPrint('Predict API request failed: $e');
+      predError.value = "Couldn't reach the pest checker. Check your connection and try again.";
     } finally {
       isPredicting.value = false;
     }
