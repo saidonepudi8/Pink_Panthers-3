@@ -70,6 +70,7 @@ class ResultsCard extends StatelessWidget {
                 icon: Icons.notifications_none_rounded, 
                 text: note!,
                 color: AppColors.textSecondary,
+                wrap: true,
               ),
             )
         ],

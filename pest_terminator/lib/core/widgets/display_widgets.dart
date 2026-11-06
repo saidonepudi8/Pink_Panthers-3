@@ -95,18 +95,21 @@ class IconLabel extends StatelessWidget {
     required this.icon,
     required this.text,
     this.color = AppColors.textSecondary,
-    this.bold = false
+    this.bold = false,
+    this.wrap = false,
   });
 
   final IconData icon;
   final String text;
   final Color color;
   final bool bold;
+  final bool wrap; // true = show all lines; false = single line with "..."
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: wrap ? CrossAxisAlignment.start : CrossAxisAlignment.center,
       children: [
         Icon(icon, size: 17, color: color),
         const SizedBox(width: 6),
@@ -114,7 +117,8 @@ class IconLabel extends StatelessWidget {
         Flexible(
           child: Text(
             text,
-            overflow: TextOverflow.ellipsis,
+            maxLines: wrap ? null : 1,
+            overflow: wrap ? null : TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 12.5,
               color: color,
