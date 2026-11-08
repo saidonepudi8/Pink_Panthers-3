@@ -55,6 +55,7 @@ class _AlertDetails extends StatelessWidget {
 
         Obx(() {
           if(c.results.isEmpty) return const SizedBox.shrink();
+          final runAt = c.lastRunAt.value;
 
           // Display populated data
           return Column(
@@ -63,7 +64,13 @@ class _AlertDetails extends StatelessWidget {
               const SizedBox(height: AppSpacing.xl),
               const SectionHeader(title: 'Analysis Results'),
               const SizedBox(height: 14),
-              ResultsCard(rows: c.results.toList()),
+              ResultsCard(
+                rows: c.results.toList(),
+                note: runAt == null
+                    ? null
+                    : 'Checked at ${_clock(runAt)}. The app names the animal correctly '
+                      'about 8 out of 10 times, so look at the photo before you spray.',
+              ),
             ],
           );
         }),
@@ -153,6 +160,13 @@ class _AlertDetails extends StatelessWidget {
       ],
     );
   }
+}
+
+// "2:03:27 PM" (seconds kept so each re-check shows a new time)
+String _clock(DateTime t) {
+  final hour = t.hour % 12 == 0 ? 12 : t.hour % 12;
+  String two(int n) => n.toString().padLeft(2, '0');
+  return '$hour:${two(t.minute)}:${two(t.second)} ${t.hour < 12 ? 'AM' : 'PM'}';
 }
 
 // EmptyState if retrieving model prediction results

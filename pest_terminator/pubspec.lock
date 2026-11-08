@@ -485,15 +485,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.2"
-  win32:
-    dependency: transitive
-    description:
-      name: win32
-      sha256: a0b93865d5644f11cf6a8c3f6db909f1ec168958b5805f6cc684adea957cd63d
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.4.0"
-    version: "1.1.1"
   xdg_directories:
     dependency: transitive
     description:
