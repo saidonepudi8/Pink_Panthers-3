@@ -25,5 +25,5 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/rodent.png
+    - assets/ # All images in assets/ (not subfolders like assets/model/)
     - lib/.env
