@@ -1,4 +1,4 @@
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show AssetManifest, rootBundle;
 
 import '../../../services/predict_service.dart';
 import '../models/pest_alert.dart';
@@ -16,6 +16,43 @@ class AlertsRepository {
   AlertsRepository({PredictService service = const PredictService()}) : _service = service;
 
   final PredictService _service;
+
+  // TEST DATA: one alert per image in assets/ so the model can be tried on each one.
+  // Add more by dropping images into assets/ and restarting the app.
+  // [skip] = images already used by other alerts.
+  Future<List<PestAlert>> loadTestImageAlerts({Set<String> skip = const {}}) async {
+    final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+    final images = manifest
+        .listAssets()
+        .where((path) => RegExp(r'^assets/[^/]+\.(jpe?g|png|webp|bmp)$', caseSensitive: false).hasMatch(path))
+        .where((path) => !skip.contains(path))
+        .toList()
+      ..sort();
+
+    // Newest first: Test image 1 at the top of the timeline
+    final newest = DateTime(2025, 6, 1, 12);
+    return [
+      for (var i = 0; i < images.length; i++)
+        PestAlert(
+          id: 'test-${i + 1}',
+          title: 'Test image ${i + 1}',
+          species: 'Unknown',
+          field: 'Test camera: ${_cameraName(images[i])}',
+          crop: 'Test',
+          priority: AlertPriority.medium,
+          status: AlertStatus.newDetection,
+          detectedAt: newest.subtract(Duration(hours: i)),
+          imageSrc: images[i],
+        ),
+    ];
+  }
+
+  // "assets/missouri__97c5.jpg" -> "Missouri" (dataset the photo came from)
+  static String _cameraName(String path) {
+    final file = path.split('/').last;
+    final source = file.contains('__') ? file.split('__').first : 'unknown';
+    return source[0].toUpperCase() + source.substring(1);
+  }
 
   // Sends the alert's image to the trained model and builds the rows for the results table
   Future<List<AnalysisResult>> classify(PestAlert alert) async {

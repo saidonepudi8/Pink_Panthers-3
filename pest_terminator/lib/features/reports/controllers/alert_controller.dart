@@ -71,6 +71,18 @@ class AlertsController extends GetxController {
     selected.value = _newestFirst
         .where((a) => a.status != AlertStatus.resolved)
         .firstOrNull;
+
+    _addTestImageAlerts();
+  }
+
+  // TEST DATA: adds a "Test image" alert for every image in assets/ (except ones already used above)
+  Future<void> _addTestImageAlerts() async {
+    try {
+      final used = alerts.map((a) => a.imageSrc).whereType<String>().toSet();
+      alerts.addAll(await _repository.loadTestImageAlerts(skip: used));
+    } catch (e) {
+      debugPrint('Could not load test image alerts: $e');
+    }
   }
 
   List<PestAlert> get _newestFirst =>
